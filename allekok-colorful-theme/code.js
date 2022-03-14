@@ -12,7 +12,9 @@
 	    `opacity:.8` +
 	    ` } ` +
 	    `.poet img { ` +
-	    `border-radius:.2rem .2rem 0 0;width:100%;background:#EEE` +
+	    `border-radius:.2rem .2rem 0 0;` +
+	    `width:100%;` +
+	    `background:#EEE` +
 	    ` } ` +
 	    `.poet h3 { ` +
 	    `color:#000;` +
