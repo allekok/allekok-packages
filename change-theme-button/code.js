@@ -53,4 +53,4 @@
 	function toggle_theme() {
 		set_theme(next_theme)
 	}
-}())
+}());
