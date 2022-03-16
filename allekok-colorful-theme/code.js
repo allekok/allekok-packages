@@ -36,4 +36,4 @@
 				'#FFFEA9', '#D7E9F7']
 		return colors[Math.floor(Math.random() * colors.length)]
 	}
-})()
+}())
