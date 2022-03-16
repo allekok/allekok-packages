@@ -4,4 +4,4 @@
 			   '#poets div:first-child a.material-icons { ' +
 			   'display:none !important }')
 	document.head.appendChild(style)
-})()
+}())
