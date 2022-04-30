@@ -12,18 +12,16 @@
 		ajax(parent, target)
 		loading.style.display = 'none'
 	}
-
 	function justify_poem() {
 		const poem_el = document.getElementById('hon')
-		if(!poem_el)
-			return
-		with_test_element(justify, poem_el)
+		if(poem_el)
+			with_test_element(justify, poem_el)
 	}
-
 	function justify(poem_el, test_el) {
-		apply_to_text(poem_el, fill(poem_el, test_el))
+		const widths = get_lines_width(test_el)(poem_el)
+		if(widths)
+			apply_to_text(poem_el, fill(poem_el, test_el, widths))
 	}
-
 	function with_test_element(proc, parent_el) {
 		const test_el = document.createElement('DIV')
 		test_el.className = 'b'
@@ -32,9 +30,7 @@
 		proc(parent_el, test_el)
 		parent_el.parentElement.removeChild(test_el)
 	}
-
-	function fill(poem_el, test_el) {
-		const widths = get_lines_width(test_el)(poem_el)
+	function fill(poem_el, test_el, widths) {
 		const max_width = get_max(widths)
 		const space_width = calc_space_width(test_el)
 		return line => {
@@ -49,7 +45,6 @@
 				'</span>')
 		}
 	}
-
 	function insert_spaces(str, spaces) {
 		while(spaces) {
 			let new_str = ''
@@ -64,22 +59,24 @@
 		}
 		return str
 	}
-
 	function calc_required_spaces(width, max_width, space_width) {
 		return Math.round((max_width - width) / space_width)
 	}
-
 	function calc_width(test_el) {
 		return str => {
 			test_el.innerText = str
 			return test_el.offsetWidth
 		}
 	}
-
 	function calc_space_width(test_el, space=' ') {
 		return calc_width(test_el)(space)
 	}
-
+	function get_lines_width(test_el) {
+		return el => map_text_nodes(el, calc_width(test_el))
+	}
+	function get_max(items_array) {
+		return Math.max(...items_array)
+	}
 	function exclude(el) {
 		const elements = ['SUP']
 		const classes = ['material-icons', 'm', 'n']
@@ -91,7 +88,6 @@
 				return true
 		return false
 	}
-
 	function apply_to_text(el, proc) {
 		let html = ''
 		for(const o of el.childNodes) {
@@ -111,7 +107,6 @@
 		}
 		el.innerHTML = html
 	}
-
 	function map_text_nodes(el, proc) {
 		function loop(el) {
 			for(const o of el.childNodes) {
@@ -129,13 +124,5 @@
 		const res = []
 		loop(el)
 		return res
-	}
-
-	function get_max(items_array) {
-		return Math.max(...items_array)
-	}
-
-	function get_lines_width(test_el) {
-		return el => map_text_nodes(el, calc_width(test_el))
 	}
 }());
