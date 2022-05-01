@@ -45,15 +45,18 @@
 		return `<span style="white-space:pre">${str}</span>\n`
 	}
 	function insert_spaces(str, spaces) {
-		if(!spaces)
-			return str
-		const tokens = str.split(/( +)/)
-		if(tokens.length < 2)
-			return str
-		while(spaces > 0)
-			for(let i = 1; i < tokens.length && spaces--; i += 2)
-				tokens[i] += ' '
-		return tokens.join('')
+		while(spaces) {
+			let new_str = ''
+			for(const c of str) {
+				if(c == ' ' && spaces) {
+					new_str += ' '
+					spaces--
+				}
+				new_str += c
+			}
+			str = new_str
+		}
+		return str
 	}
 	function calc_required_spaces(width, max_width, space_width) {
 		return Math.round((max_width - width) / space_width)
