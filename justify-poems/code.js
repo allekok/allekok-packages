@@ -15,14 +15,15 @@
 	function justify_poem() {
 		const poem_el = document.getElementById('hon')
 		if(poem_el)
-			with_test_element(justify, poem_el)
+			with_test_element(poem_el, justify)
 	}
 	function justify(poem_el, test_el) {
-		const widths = get_lines_width(test_el)(poem_el)
+		const widths = get_lines_width(poem_el, test_el)
+		const space_width = calc_space_width(test_el)
 		if(widths)
-			apply_to_text(poem_el, fill(poem_el, test_el, widths))
+			apply_to_text(poem_el, fill(widths, space_width))
 	}
-	function with_test_element(proc, parent_el) {
+	function with_test_element(parent_el, proc) {
 		const test_el = document.createElement('DIV')
 		test_el.className = 'b'
 		test_el.style = 'display:inline;padding:0;white-space:pre'
@@ -30,34 +31,29 @@
 		proc(parent_el, test_el)
 		parent_el.parentElement.removeChild(test_el)
 	}
-	function fill(poem_el, test_el, widths) {
+	function fill(widths, space_width) {
 		const max_width = get_max(widths)
-		const space_width = calc_space_width(test_el)
 		return line => {
 			const width = widths.shift()
 			const spaces = calc_required_spaces(width,
 							    max_width,
 							    space_width)
-			if(line.indexOf(' ') === -1)
-				line = ` ${line} `
-			return ('<span style="white-space:pre">' +
-				insert_spaces(line, spaces) +
-				'</span>')
+			return add_html(insert_spaces(line, spaces))
 		}
 	}
+	function add_html(str) {
+		return `<span style="white-space:pre">${str}</span>\n`
+	}
 	function insert_spaces(str, spaces) {
-		while(spaces) {
-			let new_str = ''
-			for(const c of str) {
-				if(c == ' ' && spaces) {
-					new_str += ' '
-					spaces--
-				}
-				new_str += c
-			}
-			str = new_str
-		}
-		return str
+		if(!spaces)
+			return str
+		const tokens = str.split(/( +)/)
+		if(tokens.length < 2)
+			return str
+		while(spaces > 0)
+			for(let i = 1; i < tokens.length && spaces--; i += 2)
+				tokens[i] += ' '
+		return tokens.join('')
 	}
 	function calc_required_spaces(width, max_width, space_width) {
 		return Math.round((max_width - width) / space_width)
@@ -71,8 +67,8 @@
 	function calc_space_width(test_el, space=' ') {
 		return calc_width(test_el)(space)
 	}
-	function get_lines_width(test_el) {
-		return el => map_text_nodes(el, calc_width(test_el))
+	function get_lines_width(source_el, test_el) {
+		return map_text_nodes(source_el, calc_width(test_el))
 	}
 	function get_max(items_array) {
 		return Math.max(...items_array)
