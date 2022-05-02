@@ -1,16 +1,16 @@
 (function justify_poems() {
-	ajax_load = new_ajax_load
-	justify_poem()
+	let old_ajax_load
+
+	window.addEventListener('load', () => {
+		old_ajax_load = ajax_load
+		ajax_load = new_ajax_load
+
+		justify_poem()
+	})
 
 	function new_ajax_load(url, href, content, parent, target, loading) {
-		const t = document.querySelector(target)
-		window.history.pushState({url: url}, '', href)
-		window.scrollTo(0, 0)
-		t.outerHTML = content
-		eval_js(content)
+		old_ajax_load(url, href, content, parent, target, loading)
 		justify_poem()
-		ajax(parent, target)
-		loading.style.display = 'none'
 	}
 	function justify_poem() {
 		const poem_el = document.getElementById('hon')
