@@ -45,6 +45,8 @@
 		return `<span style="white-space:pre">${str}</span>\n`
 	}
 	function insert_spaces(str, spaces) {
+		if(str.indexOf(' ') == -1)
+			return str
 		while(spaces) {
 			let new_str = ''
 			for(const c of str) {
