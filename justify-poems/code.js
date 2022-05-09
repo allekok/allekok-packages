@@ -13,7 +13,7 @@
 		justify_poem()
 	}
 	function justify_poem() {
-		const poem_el = document.getElementById('hon')
+		const poem_el = document.querySelector('article#hon')
 		if(poem_el)
 			with_test_element(poem_el, justify)
 	}
