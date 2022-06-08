@@ -1,8 +1,9 @@
 (function change_theme_button() {
 	const themes = {
+		system: {name: 'system', icon: 'brightness_4', next: 'light'},
 		light: {name: 'light', icon: 'brightness_5', next: 'dark'},
 		dark: {name: 'dark', icon: 'brightness_2', next: 'custom'},
-		custom: {name: 'custom', icon: 'settings', next: 'light'}
+		custom: {name: 'custom', icon: 'settings', next: 'system'}
 	}
 	const current_theme = get_current_theme()
 	const next_theme = get_next_theme()
@@ -45,7 +46,7 @@
 	}
 	function get_current_theme() {
 		const theme = get_cookie('theme')
-		return theme in themes ? themes[theme] : themes.light
+		return theme in themes ? themes[theme] : themes.system
 	}
 	function get_next_theme() {
 		return themes[current_theme.next]
